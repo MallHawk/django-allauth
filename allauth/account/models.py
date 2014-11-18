@@ -123,7 +123,7 @@ class EmailConfirmation(models.Model):
         ctx = {
             "user": self.email_address.user,
             "activate_url": activate_url,
-            "current_site": current_site,
+            "site": current_site,
             "key": self.key,
         }
         if signup:
