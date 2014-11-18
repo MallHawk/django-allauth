@@ -51,11 +51,12 @@ class DefaultAccountAdapter(object):
             ret = verified_email.lower() == email.lower()
         return ret
 
-    def format_email_subject(self, subject):
+    def format_email_subject(self, subject, context):
         prefix = app_settings.EMAIL_SUBJECT_PREFIX
         if prefix is None:
-            site = Site.objects.get_current()
-            prefix = u"[{name}] ".format(name=site.name)
+            site = context.get('site')
+            site_name = site.name if site is not None else 'unknown'
+            prefix = u"[{name}] ".format(name=site_name)
         return prefix + force_text(subject)
 
     def render_mail(self, template_prefix, email, context):
@@ -67,7 +68,7 @@ class DefaultAccountAdapter(object):
                                    context)
         # remove superfluous line breaks
         subject = " ".join(subject.splitlines()).strip()
-        subject = self.format_email_subject(subject)
+        subject = self.format_email_subject(subject, context)
 
         bodies = {}
         for ext in ['html', 'txt']:

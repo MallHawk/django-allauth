@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import (HttpResponseRedirect, Http404,
                          HttpResponsePermanentRedirect)
 from django.shortcuts import get_object_or_404
@@ -112,7 +112,7 @@ class LoginView(RedirectAuthenticatedUserMixin,
         redirect_field_value = self.request.REQUEST \
             .get(self.redirect_field_name)
         ret.update({"signup_url": signup_url,
-                    "site": Site.objects.get_current(),
+                    "site": get_current_site(self.request),
                     "redirect_field_name": self.redirect_field_name,
                     "redirect_field_value": redirect_field_value})
         return ret

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView
@@ -53,7 +53,7 @@ class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin,
 
     def get_context_data(self, **kwargs):
         ret = super(SignupView, self).get_context_data(**kwargs)
-        ret.update(dict(site=Site.objects.get_current(),
+        ret.update(dict(site=get_current_site(self.request),
                         account=self.sociallogin.account))
         return ret
 

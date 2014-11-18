@@ -5,7 +5,7 @@ from django.db import models
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.crypto import get_random_string
 
@@ -115,7 +115,7 @@ class EmailConfirmation(models.Model):
 
     def send(self, request, signup=False, **kwargs):
         current_site = kwargs["site"] if "site" in kwargs \
-            else Site.objects.get_current()
+            else get_current_site(request)
         activate_url = reverse("account_confirm_email", args=[self.key])
         activate_url = build_absolute_uri(request,
                                           activate_url,

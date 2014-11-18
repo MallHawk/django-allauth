@@ -12,7 +12,7 @@ from django.utils.importlib import import_module
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 
 from ..utils import (email_address_exists, get_user_model,
                      set_form_field_order,
@@ -417,7 +417,7 @@ class ResetPasswordForm(forms.Form):
             # password_reset = PasswordReset(user=user, temp_key=temp_key)
             # password_reset.save()
 
-            current_site = Site.objects.get_current()
+            current_site = get_current_site(request)
 
             # send the password reset email
             path = reverse("account_reset_password_from_key",
